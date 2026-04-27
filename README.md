@@ -112,6 +112,35 @@ claude   # Open Claude Code in this directory
 
 See [docs/SETUP.md](docs/SETUP.md) for the full setup guide.
 
+## Web UI (local)
+
+If you'd rather click than type, this fork ships with a local web UI that
+runs on your laptop and reads/writes the same files Claude Code uses.
+
+```bash
+npm run ui
+```
+
+That's it — first run installs UI deps (~30s), subsequent runs are instant.
+Your default browser opens at `http://localhost:3000`. From inside Claude
+Code you can also type `/ui` to launch it.
+
+What you get:
+
+- **Forms** for editing `cv.md` and `config/profile.yml` (field-merge safe — advanced fields like `archetypes` and `proof_points` are preserved on save)
+- **Pipeline view** of every offer you've evaluated, sorted by score, with status pills and Apple-style typography
+- **Paste-URL evaluator** — pastes a JD, runs `claude -p` in the background, streams the live log
+- **Report viewer** — renders the A–G evaluation reports with proper typography, tables, and code blocks
+- **One-click PDF generation** — wires `/career-ops pdf` to a button at the bottom of every report
+- **Portal scanner** — runs `npm run scan`, lists pending URLs in an inbox with per-row Evaluate buttons
+- **Settings + diagnostic** — structured fs.exists checks for every well-known file, plus a "Run full diagnostic" button that streams `node doctor.mjs` output
+
+Everything stays on your laptop. No hosting, no auth, no cloud. Jobs run
+in parallel as separate `claude -p` subprocesses.
+
+See [`ui/README.md`](ui/README.md) for the full guide, environment variables,
+and the route map.
+
 ## Gemini CLI Integration
 
 Career-ops supports [Gemini CLI](https://github.com/google-gemini/gemini-cli) natively — the same way it supports Claude Code and OpenCode. All 15 slash commands are available, using the same `modes/*.md` evaluation logic.
