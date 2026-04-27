@@ -6,7 +6,7 @@ export type JobStatus =
   | "cancelled"
   | "interrupted"; // process was lost when the dev server restarted
 
-export type JobKind = "evaluate"; // future: "scan", "pdf"
+export type JobKind = "evaluate" | "pdf"; // future: "scan"
 
 export interface JobLogLine {
   t: number;            // ms since epoch
