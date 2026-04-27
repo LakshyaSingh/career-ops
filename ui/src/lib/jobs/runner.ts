@@ -18,6 +18,11 @@ export interface StartPdfArgs {
   url: string;   // the JD URL/context to tailor against
 }
 
+export interface StartScanArgs {
+  dryRun?: boolean;
+  company?: string;  // optional --company filter
+}
+
 /**
  * Spawn a Claude Code headless evaluation. The career-ops skill auto-detects
  * a job URL in the prompt and runs the auto-pipeline (evaluate + report +
@@ -30,7 +35,8 @@ export async function startEvaluateJob(args: StartEvaluateArgs): Promise<Job> {
   return startJob({
     kind: "evaluate",
     target: args.url,
-    promptForClaude: args.url,
+    bin: "claude",
+    argv: ["-p", args.url],
     commandForLog: `claude -p "${args.url}"`,
   });
 }
@@ -40,21 +46,44 @@ export async function startEvaluateJob(args: StartEvaluateArgs): Promise<Job> {
  * the given JD URL. Output lands in `output/cv-{candidate}-{company}-{date}.pdf`.
  */
 export async function startPdfJob(args: StartPdfArgs): Promise<Job> {
-  // Phrase as a slash command so career-ops routes to the `pdf` mode rather
-  // than the auto-pipeline. The skill's `_shared.md` recognizes this form.
   const prompt = `/career-ops pdf ${args.url}`;
   return startJob({
     kind: "pdf",
     target: args.url,
-    promptForClaude: prompt,
+    bin: "claude",
+    argv: ["-p", prompt],
     commandForLog: `claude -p "${prompt}"`,
+  });
+}
+
+/**
+ * Run career-ops's portal scanner. Pure-Node, zero LLM cost — hits
+ * Greenhouse/Ashby/Lever APIs directly and appends new offers to
+ * data/pipeline.md and data/scan-history.tsv.
+ */
+export async function startScanJob(args: StartScanArgs): Promise<Job> {
+  const argv = ["scan.mjs"];
+  if (args.dryRun) argv.push("--dry-run");
+  if (args.company) {
+    argv.push("--company", args.company);
+  }
+  const targetLabel = args.company
+    ? `Single company: ${args.company}${args.dryRun ? " (dry run)" : ""}`
+    : `All enabled companies${args.dryRun ? " (dry run)" : ""}`;
+  return startJob({
+    kind: "scan",
+    target: targetLabel,
+    bin: "node",
+    argv,
+    commandForLog: `node ${argv.join(" ")}`,
   });
 }
 
 interface InternalStartArgs {
   kind: Job["kind"];
   target: string;
-  promptForClaude: string;
+  bin: string;            // executable name on PATH
+  argv: string[];         // arguments
   commandForLog: string;
 }
 
@@ -88,7 +117,7 @@ async function startJob(args: InternalStartArgs): Promise<Job> {
 
   let child: ChildProcess;
   try {
-    child = spawn("claude", ["-p", args.promptForClaude], {
+    child = spawn(args.bin, args.argv, {
       cwd: repoRoot(),
       env: process.env,
       stdio: ["ignore", "pipe", "pipe"],

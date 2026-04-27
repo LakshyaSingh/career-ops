@@ -2,6 +2,7 @@ import Link from "next/link";
 import { JobTray } from "./JobTray";
 
 const links = [
+  { href: "/scan", label: "Scan" },
   { href: "/pipeline", label: "Pipeline" },
   { href: "/profile", label: "Profile" },
   { href: "/cv", label: "CV" },
