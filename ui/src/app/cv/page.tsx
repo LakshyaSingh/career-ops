@@ -1,10 +1,10 @@
-import { readProfile } from "@/lib/career-ops/profile";
-import { ProfileEditor } from "@/components/ProfileEditor";
+import { readCV } from "@/lib/career-ops/cv";
+import { CVEditor } from "@/components/CVEditor";
 
 export const dynamic = "force-dynamic";
 
-export default async function ProfilePage() {
-  const { basics, exists } = await readProfile();
+export default async function CVPage() {
+  const { content, exists } = await readCV();
 
   return (
     <section
@@ -13,28 +13,28 @@ export default async function ProfilePage() {
     >
       <div className="container" style={{ maxWidth: "920px" }}>
         <p className="eyebrow" style={{ marginBottom: "0.75rem" }}>
-          Profile
+          CV
         </p>
         <h1
           className="display"
           style={{ fontSize: "var(--display-lg)", marginBottom: "1rem" }}
         >
-          Tell the system who you are.
+          Your CV, in one place.
         </h1>
         <p
           style={{
             color: "var(--fg-muted)",
             fontSize: "1.1rem",
-            maxWidth: "55ch",
+            maxWidth: "60ch",
             marginBottom: "2.5rem",
             lineHeight: 1.55,
           }}
         >
-          The system is only as good as what it knows about you. Edits autosave
-          to <code>config/profile.yml</code>.
+          Markdown is the source of truth — every evaluation reads from this
+          file. Edits autosave to <code>cv.md</code>.
         </p>
 
-        <ProfileEditor initialBasics={basics} initialExists={exists} />
+        <CVEditor initialContent={content} initialExists={exists} />
       </div>
     </section>
   );
