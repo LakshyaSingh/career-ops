@@ -1,5 +1,4 @@
 import { promises as fs } from "node:fs";
-import path from "node:path";
 import Link from "next/link";
 import { paths } from "@/lib/career-ops/paths";
 
@@ -79,7 +78,7 @@ export default async function ReportsPage() {
             {reports.map((r) => (
               <Link
                 key={r.name}
-                href={`/reports/${encodeURIComponent(path.join("reports", r.name))}`}
+                href={`/reports/${encodeURIComponent(r.name)}`}
                 style={{
                   display: "grid",
                   gridTemplateColumns: "60px 110px 1fr",

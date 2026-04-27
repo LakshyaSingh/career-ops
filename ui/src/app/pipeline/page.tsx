@@ -102,7 +102,9 @@ export default async function PipelinePage() {
                     key={e.num}
                     href={
                       e.reportPath
-                        ? `/reports/${encodeURIComponent(e.reportPath)}`
+                        ? `/reports/${encodeURIComponent(
+                            e.reportPath.replace(/^reports\//, ""),
+                          )}`
                         : "/pipeline"
                     }
                     role="row"
