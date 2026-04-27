@@ -23,6 +23,10 @@ export interface StartScanArgs {
   company?: string;  // optional --company filter
 }
 
+export interface StartDoctorArgs {
+  // no args — doctor.mjs takes none
+}
+
 /**
  * Spawn a Claude Code headless evaluation. The career-ops skill auto-detects
  * a job URL in the prompt and runs the auto-pipeline (evaluate + report +
@@ -61,6 +65,22 @@ export async function startPdfJob(args: StartPdfArgs): Promise<Job> {
  * Greenhouse/Ashby/Lever APIs directly and appends new offers to
  * data/pipeline.md and data/scan-history.tsv.
  */
+/**
+ * Run career-ops's canonical setup checker. Pure-Node, no LLM. Validates
+ * Node version, dependencies, Playwright Chromium, and the user-data files
+ * (cv.md, config/profile.yml, portals.yml). Output is human-formatted; the
+ * UI surfaces a structured quick-status panel separately.
+ */
+export async function startDoctorJob(_args: StartDoctorArgs = {}): Promise<Job> {
+  return startJob({
+    kind: "doctor",
+    target: "Full system diagnostic",
+    bin: "node",
+    argv: ["doctor.mjs"],
+    commandForLog: "node doctor.mjs",
+  });
+}
+
 export async function startScanJob(args: StartScanArgs): Promise<Job> {
   const argv = ["scan.mjs"];
   if (args.dryRun) argv.push("--dry-run");

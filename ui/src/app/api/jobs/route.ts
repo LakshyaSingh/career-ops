@@ -1,6 +1,11 @@
 import { NextResponse } from "next/server";
 import { getJobStore } from "@/lib/jobs/store";
-import { startEvaluateJob, startPdfJob, startScanJob } from "@/lib/jobs/runner";
+import {
+  startEvaluateJob,
+  startPdfJob,
+  startScanJob,
+  startDoctorJob,
+} from "@/lib/jobs/runner";
 
 export const dynamic = "force-dynamic";
 
@@ -19,7 +24,7 @@ export async function POST(request: Request) {
     company?: string;
   };
 
-  // Scan is the only kind that doesn't need a URL.
+  // Kinds that don't need a URL.
   if (body.kind === "scan") {
     const job = await startScanJob({
       dryRun: !!body.dryRun,
@@ -27,6 +32,10 @@ export async function POST(request: Request) {
         ? body.company.trim()
         : undefined,
     });
+    return NextResponse.json({ job: { ...job, log: [] } });
+  }
+  if (body.kind === "doctor") {
+    const job = await startDoctorJob();
     return NextResponse.json({ job: { ...job, log: [] } });
   }
 
