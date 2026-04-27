@@ -15,7 +15,10 @@
     "rollback": "node update-system.mjs rollback",
     "liveness": "node check-liveness.mjs",
     "scan": "node scan.mjs",
-    "gemini:eval": "node gemini-eval.mjs"
+    "gemini:eval": "node gemini-eval.mjs",
+    "ui:install": "cd ui && npm install",
+    "ui:build": "cd ui && npm run build",
+    "ui": "node ui-launcher.mjs"
   },
   "keywords": [
     "ai",

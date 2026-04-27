@@ -1,0 +1,168 @@
+@import "tailwindcss";
+
+/* ---------- Design tokens (Apple.com product page) ---------- */
+:root {
+  /* Surfaces */
+  --bg: #fbfbfd;          /* Apple's signature off-white */
+  --bg-elevated: #ffffff;
+  --surface-hairline: rgba(0, 0, 0, 0.08);
+  --surface-glass: rgba(251, 251, 253, 0.72);
+
+  /* Text */
+  --fg: #1d1d1f;          /* Apple body text */
+  --fg-muted: #6e6e73;    /* Apple secondary text */
+  --fg-subtle: #86868b;
+
+  /* Accent — Apple's blue */
+  --accent: #0071e3;
+  --accent-hover: #0077ed;
+
+  /* Motion — Apple's signature easing */
+  --ease-apple: cubic-bezier(0.28, 0.11, 0.32, 1);
+  --ease-out-soft: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Type scale */
+  --display-2xl: clamp(3.5rem, 7vw + 1rem, 7rem);    /* hero */
+  --display-xl: clamp(2.75rem, 4.5vw + 1rem, 5rem);
+  --display-lg: clamp(2rem, 2.5vw + 1rem, 3.25rem);
+  --display-md: 1.75rem;
+
+  /* Layout */
+  --max-content: 1200px;
+  --gutter: clamp(1.25rem, 4vw, 2.5rem);
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #000000;
+    --bg-elevated: #161617;
+    --surface-hairline: rgba(255, 255, 255, 0.1);
+    --surface-glass: rgba(0, 0, 0, 0.72);
+    --fg: #f5f5f7;
+    --fg-muted: #a1a1a6;
+    --fg-subtle: #86868b;
+    --accent: #2997ff;
+    --accent-hover: #41a3ff;
+  }
+}
+
+@theme inline {
+  --color-bg: var(--bg);
+  --color-bg-elevated: var(--bg-elevated);
+  --color-fg: var(--fg);
+  --color-fg-muted: var(--fg-muted);
+  --color-fg-subtle: var(--fg-subtle);
+  --color-accent: var(--accent);
+  --color-hairline: var(--surface-hairline);
+  --font-display: "SF Pro Display", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial, sans-serif;
+  --font-text: "SF Pro Text", -apple-system, BlinkMacSystemFont, "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+/* ---------- Base ---------- */
+html {
+  scroll-behavior: smooth;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-text);
+  font-feature-settings: "ss01", "cv11";
+  letter-spacing: -0.011em;
+  line-height: 1.47;
+  font-size: 17px;
+}
+
+/* Apple uses these tight tracking values on display type */
+.display {
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: -0.04em;
+  line-height: 1.05;
+}
+
+.eyebrow {
+  font-family: var(--font-text);
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  text-transform: uppercase;
+  font-size: 0.78rem;
+  color: var(--fg-muted);
+}
+
+.text-balance {
+  text-wrap: balance;
+}
+
+/* Hairline — Apple's signature 1px divider that scales correctly on retina */
+.hairline-b {
+  box-shadow: 0 1px 0 var(--surface-hairline);
+}
+
+/* Frosted-glass effect for the nav */
+.glass {
+  background: var(--surface-glass);
+  -webkit-backdrop-filter: saturate(180%) blur(20px);
+  backdrop-filter: saturate(180%) blur(20px);
+}
+
+/* Pill button — Apple's primary CTA */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.65rem 1.25rem;
+  border-radius: 999px;
+  font-weight: 500;
+  font-size: 1rem;
+  background: var(--accent);
+  color: #ffffff;
+  transition: background 240ms var(--ease-apple), transform 240ms var(--ease-apple);
+}
+.pill:hover { background: var(--accent-hover); }
+.pill:active { transform: scale(0.98); }
+
+.pill-ghost {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-weight: 500;
+  font-size: 1rem;
+  color: var(--accent);
+  transition: opacity 200ms var(--ease-apple);
+}
+.pill-ghost:hover { opacity: 0.8; }
+
+/* Section wrapper */
+.section {
+  padding-block: clamp(4rem, 9vw, 9rem);
+  padding-inline: var(--gutter);
+}
+.container {
+  max-width: var(--max-content);
+  margin-inline: auto;
+}
+
+/* Card with the very subtle Apple shadow */
+.card {
+  background: var(--bg-elevated);
+  border-radius: 22px;
+  border: 1px solid var(--surface-hairline);
+  box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.04),
+    0 8px 24px -12px rgba(0, 0, 0, 0.08);
+}
+
+/* Selection */
+::selection {
+  background: color-mix(in srgb, var(--accent) 28%, transparent);
+}
+
+/* Scroll-fade utility (used with motion library viewport reveals) */
+.fade-up-init {
+  opacity: 0;
+  transform: translateY(28px);
+}
