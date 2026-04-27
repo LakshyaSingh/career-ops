@@ -1,9 +1,11 @@
 import Link from "next/link";
 import { Reveal } from "@/components/Reveal";
+import { TourPrompt } from "@/components/TourPrompt";
 
 export default function Home() {
   return (
     <>
+      <TourPrompt />
       {/* ───────── Hero ───────── */}
       <section
         style={{

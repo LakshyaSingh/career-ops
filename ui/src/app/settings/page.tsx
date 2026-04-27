@@ -247,6 +247,22 @@ export default async function SettingsPage() {
             />
           </dl>
         </div>
+
+        <p
+          style={{
+            marginTop: "2rem",
+            color: "var(--fg-subtle)",
+            fontSize: "0.85rem",
+          }}
+        >
+          New here, or want a refresher?{" "}
+          <Link
+            href="/?tour=0"
+            style={{ color: "var(--accent)" }}
+          >
+            Restart the tour →
+          </Link>
+        </p>
       </div>
     </section>
   );

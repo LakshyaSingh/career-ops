@@ -1,5 +1,7 @@
 import type { Metadata } from "next";
+import { Suspense } from "react";
 import { Nav } from "@/components/Nav";
+import { Tour } from "@/components/Tour";
 import "./globals.css";
 
 export const metadata: Metadata = {
@@ -15,6 +17,9 @@ export default function RootLayout({
       <body className="min-h-full flex flex-col">
         <Nav />
         <main className="flex-1">{children}</main>
+        <Suspense fallback={null}>
+          <Tour />
+        </Suspense>
         <footer
           style={{
             padding: "32px var(--gutter)",
