@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { ScanSearch, Sparkles, LineChart, type LucideIcon } from "lucide-react";
 import { Reveal } from "@/components/Reveal";
 import { TourPrompt } from "@/components/TourPrompt";
 
@@ -167,11 +168,19 @@ export default function Home() {
                   <div
                     aria-hidden
                     style={{
-                      fontSize: "2rem",
+                      width: 48,
+                      height: 48,
+                      borderRadius: 12,
+                      background:
+                        "color-mix(in srgb, var(--accent) 12%, transparent)",
+                      color: "var(--accent)",
+                      display: "inline-flex",
+                      alignItems: "center",
+                      justifyContent: "center",
                       marginBottom: "1.25rem",
                     }}
                   >
-                    {f.icon}
+                    <f.Icon size={24} strokeWidth={1.75} />
                   </div>
                   <h3
                     className="display"
@@ -298,21 +307,27 @@ export default function Home() {
   );
 }
 
-const features = [
+interface Feature {
+  Icon: LucideIcon;
+  title: string;
+  body: string;
+}
+
+const features: Feature[] = [
   {
-    icon: "◐",
+    Icon: ScanSearch,
     title: "Evaluate",
     body:
       "Paste a job URL. Get a structured A–G report scored against your real career story, not keyword soup.",
   },
   {
-    icon: "◑",
+    Icon: Sparkles,
     title: "Tailor",
     body:
       "ATS-optimized PDFs generated per role. Your CV adapts to each posting without you copy-pasting bullets.",
   },
   {
-    icon: "◒",
+    Icon: LineChart,
     title: "Track",
     body:
       "A single source of truth for every application: status, score, follow-ups, and reports, all at a glance.",
