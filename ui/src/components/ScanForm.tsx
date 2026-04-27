@@ -44,7 +44,7 @@ export function ScanForm() {
             Scan portals for new offers
           </h2>
           <p style={{ color: "var(--fg-muted)", fontSize: "0.95rem", maxWidth: "55ch", lineHeight: 1.5 }}>
-            Hits Greenhouse, Ashby, and Lever APIs directly — fast, free, no LLM
+            Hits Greenhouse, Ashby, and Lever APIs directly. Fast, free, no LLM
             tokens. New offers land in your inbox below.
           </p>
         </div>
@@ -111,7 +111,7 @@ export function ScanForm() {
             type="text"
             value={company}
             onChange={(e) => setCompany(e.target.value)}
-            placeholder="e.g. Anthropic — leave blank to scan all"
+            placeholder="e.g. Anthropic, or leave blank to scan all"
             style={{
               padding: "0.55rem 0.85rem",
               background: "var(--bg-elevated)",

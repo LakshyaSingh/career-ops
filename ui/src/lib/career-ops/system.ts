@@ -70,20 +70,20 @@ export async function getSystemStatus(): Promise<SystemStatus> {
   const checks: Check[] = await Promise.all([
     fileCheck(paths.cv(), "cv.md", {
       label: "CV",
-      description: "Markdown source of truth — every evaluation reads from this file.",
-      hint: "Open the CV editor and paste your CV — it'll be created on first save.",
+      description: "Markdown source of truth. Every evaluation reads from this file.",
+      hint: "Open the CV editor and paste your CV. It'll be created on first save.",
       fixHref: "/cv",
     }),
     fileCheck(paths.profile(), "config/profile.yml", {
       label: "Profile",
       description: "Identity, target roles, narrative, compensation, and location.",
-      hint: "Open the profile editor — fields you fill in will create the file.",
+      hint: "Open the profile editor. Fields you fill in will create the file.",
       fixHref: "/profile",
     }),
     fileCheck(paths.modesProfile(), "modes/_profile.md", {
       label: "User profile mode",
       description: "Per-user customization layer career-ops uses to override system prompts.",
-      hint: "Career-ops auto-creates this from the template on first session — open Claude Code in the repo to seed it.",
+      hint: "Career-ops auto-creates this from the template on first session. Open Claude Code in the repo to seed it.",
     }),
     fileCheck(paths.portals(), "portals.yml", {
       label: "Portals",
@@ -131,7 +131,7 @@ export async function getSystemStatus(): Promise<SystemStatus> {
         description: "career-ops requires Node 18 or newer.",
         path: `v${process.versions.node}`,
         status: ok ? "ok" : "warn",
-        hint: ok ? undefined : "Upgrade Node — the dev server is running on an old version.",
+        hint: ok ? undefined : "Upgrade Node. The dev server is running on an old version.",
       };
     })(),
   ]);

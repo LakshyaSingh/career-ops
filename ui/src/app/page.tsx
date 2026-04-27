@@ -47,7 +47,7 @@ export default function Home() {
               }}
             >
               An AI-powered pipeline that evaluates offers, tailors your CV,
-              and tracks every application — running entirely on your laptop.
+              and tracks every application, running entirely on your laptop.
             </p>
           </Reveal>
 
@@ -92,7 +92,7 @@ export default function Home() {
             { stat: "740+", label: "Offers evaluated" },
             { stat: "100+", label: "Tailored CVs" },
             { stat: "10×", label: "Faster than spreadsheets" },
-            { stat: "0", label: "Data leaves your machine" },
+            { stat: "No", label: "data leaves your laptop" },
           ].map((s, i) => (
             <Reveal key={s.label} delay={i * 0.06}>
               <div>
@@ -303,7 +303,7 @@ const features = [
     icon: "◐",
     title: "Evaluate",
     body:
-      "Paste a job URL. Get a structured A–G report scored against your real career story — not keyword soup.",
+      "Paste a job URL. Get a structured A–G report scored against your real career story, not keyword soup.",
   },
   {
     icon: "◑",
@@ -315,7 +315,7 @@ const features = [
     icon: "◒",
     title: "Track",
     body:
-      "A single source of truth for every application — status, score, follow-ups, and reports — at a glance.",
+      "A single source of truth for every application: status, score, follow-ups, and reports, all at a glance.",
   },
 ];
 
@@ -333,6 +333,6 @@ const steps = [
   {
     title: "Review and decide.",
     body:
-      "The system evaluates and recommends. You always make the call — nothing is ever submitted automatically.",
+      "The system evaluates and recommends. You always make the call. Nothing is ever submitted automatically.",
   },
 ];

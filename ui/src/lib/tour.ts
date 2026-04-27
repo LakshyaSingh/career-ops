@@ -25,26 +25,26 @@ export const TOUR: TourStep[] = [
     path: "/settings",
     title: "Start with Settings",
     body:
-      "This panel shows what's set up and what's missing. Red pills mean 'fix me' — click any Fix → link to jump to the right editor. Run the full diagnostic for a deeper check.",
+      "This panel shows what's set up and what's missing. Red pills mean 'fix me'. Click any Fix → link to jump to the right editor. Run the full diagnostic for a deeper check.",
     target: "[role='row']",
   },
   {
     path: "/profile",
     title: "Tell the system who you are",
     body:
-      "A structured form — autosaves to config/profile.yml. Identity, target roles, narrative, comp, location. Anything you don't fill in stays untouched, so advanced fields edited elsewhere are safe.",
+      "A structured form. Autosaves to config/profile.yml. Identity, target roles, narrative, comp, location. Anything you don't fill in stays untouched, so advanced fields edited elsewhere are safe.",
   },
   {
     path: "/cv",
     title: "Drop in your CV",
     body:
-      "Plain markdown. Autosaves to cv.md, which every evaluation reads from. Update it whenever you accomplish something new — that's how the system learns about you.",
+      "Plain markdown. Autosaves to cv.md, which every evaluation reads from. Update it whenever you accomplish something new. That's how the system learns about you.",
   },
   {
     path: "/scan",
     title: "Find new offers",
     body:
-      "Hits Greenhouse, Ashby, and Lever directly — fast, free, no LLM tokens. New URLs land in the inbox below; each row has an Evaluate button to start a full A–G report.",
+      "Hits Greenhouse, Ashby, and Lever directly. Fast, free, no LLM tokens. New URLs land in the inbox below; each row has an Evaluate button to start a full A–G report.",
   },
   {
     path: "/pipeline",

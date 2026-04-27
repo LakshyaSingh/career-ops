@@ -151,7 +151,7 @@ export default async function PipelinePage() {
                       </span>
                     </span>
                     <span style={{ textAlign: "center" }}>
-                      {e.pdf ? "✓" : "—"}
+                      {e.pdf ? "✓" : "-"}
                     </span>
                   </Link>
                 );
@@ -197,7 +197,7 @@ function EmptyState() {
           lineHeight: 1.55,
         }}
       >
-        Once you evaluate your first offer, you’ll see it here — score, status,
+        Once you evaluate your first offer, you’ll see it here: score, status,
         report, and tailored PDF, all in one row.
       </p>
       <Link href="/profile" className="pill">

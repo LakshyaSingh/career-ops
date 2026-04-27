@@ -44,7 +44,7 @@ export function EvaluateForm() {
       <input
         type="url"
         required
-        placeholder="Paste a job URL — Greenhouse, Ashby, Lever, or any company page…"
+        placeholder="Paste a job URL: Greenhouse, Ashby, Lever, or any company page…"
         value={url}
         onChange={(e) => setUrl(e.target.value)}
         disabled={submitting}

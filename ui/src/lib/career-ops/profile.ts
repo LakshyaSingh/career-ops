@@ -111,7 +111,7 @@ export async function writeProfileBasics(basics: ProfileBasics): Promise<void> {
     noRefs: true,
   });
   const banner =
-    "# Career-Ops Profile Configuration\n# Edited via the local UI. Other fields (archetypes, proof_points, etc.)\n# are preserved as-is on save — feel free to edit them in your editor or\n# via Claude Code.\n\n";
+    "# Career-Ops Profile Configuration\n# Edited via the local UI. Other fields (archetypes, proof_points, etc.)\n# are preserved as-is on save. Feel free to edit them in your editor or\n# via Claude Code.\n\n";
   await fs.writeFile(paths.profile(), banner + yamlText, "utf8");
 }
 

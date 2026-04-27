@@ -30,7 +30,7 @@ export default async function CVPage() {
             lineHeight: 1.55,
           }}
         >
-          Markdown is the source of truth — every evaluation reads from this
+          Markdown is the source of truth. Every evaluation reads from this
           file. Edits autosave to <code>cv.md</code>.
         </p>
 

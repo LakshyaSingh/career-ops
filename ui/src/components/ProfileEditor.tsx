@@ -190,7 +190,7 @@ export function ProfileEditor({ initialBasics, initialExists }: Props) {
       <Section title="Targets" subtitle="Tell the system what you're hunting for.">
         <Field
           label="Primary roles"
-          hint="One per line — these are your North Star roles."
+          hint="One per line. These are your North Star roles."
           value={form.primary_roles}
           onChange={set("primary_roles")}
           multiline
@@ -204,7 +204,7 @@ export function ProfileEditor({ initialBasics, initialExists }: Props) {
         <Field label="Superpowers" hint="3–5 things you're great at, one per line." value={form.superpowers} onChange={set("superpowers")} multiline rows={5} />
       </Section>
 
-      <Section title="Compensation" subtitle="What 'yes' looks like — and what's a hard no.">
+      <Section title="Compensation" subtitle="What 'yes' looks like, and what's a hard no.">
         <Grid>
           <Field label="Target range" value={form["compensation.target_range"]!} onChange={set("compensation.target_range")} />
           <Field label="Walk-away minimum" value={form["compensation.minimum"]!} onChange={set("compensation.minimum")} />

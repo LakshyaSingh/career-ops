@@ -7,7 +7,7 @@ export const dynamic = "force-dynamic";
 const TONE: Record<CheckStatus, { label: string; color: string; bg: string; symbol: string }> = {
   ok:      { label: "Ready",   color: "#1a7f3a", bg: "rgba(48, 209, 88, 0.12)",  symbol: "✓" },
   warn:    { label: "Warning", color: "#a8620a", bg: "rgba(255, 159, 10, 0.14)", symbol: "!" },
-  missing: { label: "Missing", color: "#a32018", bg: "rgba(255, 69, 58, 0.12)",  symbol: "—" },
+  missing: { label: "Missing", color: "#a32018", bg: "rgba(255, 69, 58, 0.12)",  symbol: "-" },
 };
 
 export default async function SettingsPage() {

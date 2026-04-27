@@ -213,7 +213,7 @@ export function cancelJob(id: string): boolean {
   store.appendLog(id, {
     t: Date.now(),
     stream: "system",
-    text: "▸ Cancelled by user — sending SIGTERM",
+    text: "▸ Cancelled by user. Sending SIGTERM",
   });
   child.kill("SIGTERM");
   // Give it 5s to die gracefully; SIGKILL otherwise.
@@ -222,7 +222,7 @@ export function cancelJob(id: string): boolean {
       store.appendLog(id, {
         t: Date.now(),
         stream: "system",
-        text: "▸ Process still alive — sending SIGKILL",
+        text: "▸ Process still alive. Sending SIGKILL",
       });
       child.kill("SIGKILL");
     }
