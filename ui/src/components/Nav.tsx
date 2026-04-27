@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { JobTray } from "./JobTray";
 
 const links = [
   { href: "/pipeline", label: "Pipeline" },
@@ -21,19 +22,22 @@ export function Nav() {
         >
           Career&#x2011;Ops
         </Link>
-        <ul className="flex items-center gap-7">
-          {links.map((l) => (
-            <li key={l.href}>
-              <Link
-                href={l.href}
-                className="text-[12px] tracking-wide transition-opacity hover:opacity-60"
-                style={{ color: "var(--fg)" }}
-              >
-                {l.label}
-              </Link>
-            </li>
-          ))}
-        </ul>
+        <div style={{ display: "flex", alignItems: "center", gap: "1.75rem" }}>
+          <ul className="flex items-center gap-7">
+            {links.map((l) => (
+              <li key={l.href}>
+                <Link
+                  href={l.href}
+                  className="text-[12px] tracking-wide transition-opacity hover:opacity-60"
+                  style={{ color: "var(--fg)" }}
+                >
+                  {l.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
+          <JobTray />
+        </div>
       </nav>
     </header>
   );

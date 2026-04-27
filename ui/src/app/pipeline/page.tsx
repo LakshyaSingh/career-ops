@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { readTracker } from "@/lib/career-ops/tracker";
+import { EvaluateForm } from "@/components/EvaluateForm";
 
 export const dynamic = "force-dynamic"; // always read fresh from disk
 
@@ -55,10 +56,12 @@ export default async function PipelinePage() {
             }}
           >
             {sorted.length === 0
-              ? "Once you evaluate a job, it’ll appear here with its score, status, and report. To get started, set up your profile and paste a job URL."
-              : "Sorted newest first. Click a row to open its full evaluation report."}
+              ? "Paste a job URL below to start your first evaluation. Once it finishes, you’ll see the score, status, and report right here."
+              : "Sorted newest first. Click a row to open its evaluation report."}
           </p>
         </header>
+
+        <EvaluateForm />
 
         {sorted.length === 0 ? (
           <EmptyState />
