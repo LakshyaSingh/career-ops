@@ -3,6 +3,8 @@
 A local web interface for [career-ops](../README.md). Runs on your laptop,
 reads and writes the same files Claude Code uses, never leaves your machine.
 
+![Career-Ops landing page — "Find the few jobs worth your time."](../docs/ui-landing.png)
+
 ```
 ┌──────────────────────────────────────────────────┐
 │   Browser  ←→   Next.js (localhost:3000)         │

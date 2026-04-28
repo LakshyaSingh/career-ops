@@ -114,6 +114,8 @@ See [docs/SETUP.md](docs/SETUP.md) for the full setup guide.
 
 ## Web UI (local)
 
+![Career-Ops Web UI — Apple-style landing page](docs/ui-landing.png)
+
 If you'd rather click than type, this fork ships with a local web UI that
 runs on your laptop and reads/writes the same files Claude Code uses.
 
