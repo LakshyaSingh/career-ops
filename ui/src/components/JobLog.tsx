@@ -14,6 +14,7 @@ export function JobLog({ initialJob }: Props) {
   const [lines, setLines] = useState<JobLogLine[]>([]);
   const [autoScroll, setAutoScroll] = useState(true);
   const [cancelling, setCancelling] = useState(false);
+  const [now, setNow] = useState(() => Date.now());
   const logEndRef = useRef<HTMLDivElement>(null);
   const containerRef = useRef<HTMLDivElement>(null);
 
@@ -55,6 +56,12 @@ export function JobLog({ initialJob }: Props) {
     return () => el.removeEventListener("scroll", onScroll);
   }, []);
 
+  useEffect(() => {
+    if (!isActiveStatus(status)) return;
+    const timer = window.setInterval(() => setNow(Date.now()), 1000);
+    return () => window.clearInterval(timer);
+  }, [status]);
+
   async function cancel() {
     if (status !== "running") return;
     setCancelling(true);
@@ -66,6 +73,10 @@ export function JobLog({ initialJob }: Props) {
   }
 
   const isLive = status === "running" || status === "queued";
+  const startedAt = initialJob.startedAt ?? initialJob.createdAt;
+  const endedAt = initialJob.endedAt ?? now;
+  const elapsedMs = Math.max(0, (isLive ? now : endedAt) - startedAt);
+  const phase = phaseFor(initialJob.kind, status, lines);
 
   return (
     <div>
@@ -117,6 +128,84 @@ export function JobLog({ initialJob }: Props) {
       </div>
 
       <div
+        style={{
+          marginBottom: "1rem",
+          padding: "1rem",
+          border: "1px solid var(--surface-hairline)",
+          borderRadius: "14px",
+          background: "color-mix(in srgb, var(--bg-elevated) 92%, var(--accent) 8%)",
+        }}
+      >
+        <div
+          style={{
+            display: "flex",
+            justifyContent: "space-between",
+            gap: "1rem",
+            alignItems: "center",
+            color: "var(--fg)",
+          }}
+        >
+          <div
+            style={{
+              display: "flex",
+              alignItems: "center",
+              gap: "0.75rem",
+              minWidth: 0,
+            }}
+          >
+            <span
+              aria-hidden="true"
+              className={isLive ? "job-activity-dot job-activity-dot--live" : ""}
+              style={{
+                width: "9px",
+                height: "9px",
+                borderRadius: "999px",
+                flex: "0 0 auto",
+                background:
+                  status === "failed" || status === "cancelled"
+                    ? "#a32018"
+                    : status === "succeeded"
+                      ? "#24a148"
+                      : "var(--accent)",
+              }}
+            />
+            <div style={{ minWidth: 0 }}>
+              <div
+                style={{
+                  color: "var(--fg)",
+                  fontSize: "0.94rem",
+                  fontWeight: 600,
+                  lineHeight: 1.35,
+                }}
+              >
+                {phase}
+              </div>
+              <div
+                style={{
+                  color: "var(--fg-subtle)",
+                  fontSize: "0.78rem",
+                  lineHeight: 1.35,
+                  marginTop: "0.15rem",
+                }}
+              >
+                {isLive ? "The job is still running." : statusSummary(status)}
+              </div>
+            </div>
+          </div>
+          <span
+            style={{
+              color: "var(--fg-subtle)",
+              fontVariantNumeric: "tabular-nums",
+              whiteSpace: "nowrap",
+              fontSize: "0.85rem",
+            }}
+          >
+            {formatElapsed(elapsedMs)}
+          </span>
+        </div>
+      </div>
+
+      <div
         ref={containerRef}
         role="log"
         aria-live="polite"
@@ -136,12 +225,12 @@ export function JobLog({ initialJob }: Props) {
           wordBreak: "break-word",
         }}
       >
-        {[...initialJob.log, ...lines].length === 0 && (
+        {lines.length === 0 && (
           <div style={{ color: "#888" }}>
             {isLive ? "Waiting for first output…" : "No output."}
           </div>
         )}
-        {[...initialJob.log, ...lines].map((line, i) => (
+        {lines.map((line, i) => (
           <div
             key={i}
             style={{
@@ -159,4 +248,59 @@ export function JobLog({ initialJob }: Props) {
       </div>
     </div>
   );
+}
+
+function isActiveStatus(status: JobStatus) {
+  return status === "running" || status === "queued";
+}
+
+function phaseFor(kind: Job["kind"], status: JobStatus, lines: JobLogLine[]) {
+  if (status === "queued") return "Queued";
+  if (status === "succeeded") return "Completed";
+  if (status === "failed") return "Failed";
+  if (status === "cancelled") return "Cancelled";
+  if (status === "interrupted") return "Interrupted";
+
+  const latest = [...lines].reverse().find((line) => line.text.trim())?.text ?? "";
+  if (!latest) return kind === "pdf" ? "Preparing tailored resume" : "Starting evaluation";
+  if (latest.includes("Preloaded JD")) {
+    return kind === "pdf"
+      ? "JD preloaded; Claude is tailoring the resume"
+      : "JD preloaded; Claude is starting";
+  }
+  if (latest.includes("falling back to URL")) return "Reading job URL";
+  if (latest.includes("cwd:")) {
+    return kind === "pdf"
+      ? "Claude is generating the custom CV"
+      : "Claude is generating the report";
+  }
+  if (latest.startsWith("▸ Spawning")) return "Starting Claude";
+  if (kind === "pdf" && /PDF generated|Output:.*\.pdf|Tailoring applied/i.test(latest)) {
+    return "Finalizing resume output";
+  }
+  return kind === "pdf" ? "Claude is generating the custom CV" : "Claude is generating the report";
+}
+
+function statusSummary(status: JobStatus) {
+  switch (status) {
+    case "succeeded":
+      return "Finished successfully.";
+    case "failed":
+      return "Stopped with an error.";
+    case "cancelled":
+      return "Cancelled by the user.";
+    case "interrupted":
+      return "Interrupted before completion.";
+    case "queued":
+    case "running":
+      return "The job is still running.";
+  }
+}
+
+function formatElapsed(ms: number) {
+  const totalSeconds = Math.floor(ms / 1000);
+  const minutes = Math.floor(totalSeconds / 60);
+  const seconds = totalSeconds % 60;
+  if (minutes === 0) return `${seconds}s elapsed`;
+  return `${minutes}m ${String(seconds).padStart(2, "0")}s elapsed`;
 }

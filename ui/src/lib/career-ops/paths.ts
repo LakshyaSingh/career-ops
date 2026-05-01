@@ -23,6 +23,7 @@ export const paths = {
   portalsExample: () => path.join(repoRoot(), "templates", "portals.example.yml"),
   applications: () => path.join(repoRoot(), "data", "applications.md"),
   pipeline: () => path.join(repoRoot(), "data", "pipeline.md"),
+  scanHistory: () => path.join(repoRoot(), "data", "scan-history.tsv"),
   reportsDir: () => path.join(repoRoot(), "reports"),
   outputDir: () => path.join(repoRoot(), "output"),
   trackerAdditionsDir: () => path.join(repoRoot(), "batch", "tracker-additions"),

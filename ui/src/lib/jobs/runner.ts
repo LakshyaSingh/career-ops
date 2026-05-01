@@ -2,6 +2,7 @@ import { spawn, type ChildProcess } from "node:child_process";
 import { randomUUID } from "node:crypto";
 import { repoRoot } from "@/lib/career-ops/paths";
 import { getJobStore } from "./store";
+import { buildEvaluatePrompt, buildPdfPrompt } from "./posting-preload";
 import type { Job } from "./types";
 
 /**
@@ -23,9 +24,8 @@ export interface StartScanArgs {
   company?: string;  // optional --company filter
 }
 
-export interface StartDoctorArgs {
-  // no args — doctor.mjs takes none
-}
+// doctor.mjs takes no args.
+export type StartDoctorArgs = Record<string, never>;
 
 /**
  * Spawn a Claude Code headless evaluation. The career-ops skill auto-detects
@@ -36,12 +36,14 @@ export interface StartDoctorArgs {
  * Playwright, so reports include `**Verification:** unconfirmed (batch mode)`.
  */
 export async function startEvaluateJob(args: StartEvaluateArgs): Promise<Job> {
+  const prompt = await buildEvaluatePrompt(args.url);
   return startJob({
     kind: "evaluate",
     target: args.url,
     bin: "claude",
-    argv: ["-p", args.url],
-    commandForLog: `claude -p "${args.url}"`,
+    argv: ["-p", prompt.text],
+    commandForLog: prompt.commandForLog,
+    preflightLog: prompt.preflightLog,
   });
 }
 
@@ -50,13 +52,14 @@ export async function startEvaluateJob(args: StartEvaluateArgs): Promise<Job> {
  * the given JD URL. Output lands in `output/cv-{candidate}-{company}-{date}.pdf`.
  */
 export async function startPdfJob(args: StartPdfArgs): Promise<Job> {
-  const prompt = `/career-ops pdf ${args.url}`;
+  const prompt = await buildPdfPrompt(args.url);
   return startJob({
     kind: "pdf",
     target: args.url,
     bin: "claude",
-    argv: ["-p", prompt],
-    commandForLog: `claude -p "${prompt}"`,
+    argv: ["-p", prompt.text],
+    commandForLog: prompt.commandForLog,
+    preflightLog: prompt.preflightLog,
   });
 }
 
@@ -105,6 +108,7 @@ interface InternalStartArgs {
   bin: string;            // executable name on PATH
   argv: string[];         // arguments
   commandForLog: string;
+  preflightLog?: string;
 }
 
 async function startJob(args: InternalStartArgs): Promise<Job> {
@@ -129,6 +133,13 @@ async function startJob(args: InternalStartArgs): Promise<Job> {
     stream: "system",
     text: `▸ Spawning: ${args.commandForLog}`,
   });
+  if (args.preflightLog) {
+    store.appendLog(id, {
+      t: Date.now(),
+      stream: "system",
+      text: args.preflightLog,
+    });
+  }
   store.appendLog(id, {
     t: Date.now(),
     stream: "system",

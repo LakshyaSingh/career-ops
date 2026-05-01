@@ -7,6 +7,7 @@ export interface InboxEntry {
   title: string;
   done: boolean;     // markdown checkbox state
   raw: string;       // original line (for fallback display)
+  firstSeen?: string; // YYYY-MM-DD from data/scan-history.tsv when available
 }
 
 /**
@@ -35,6 +36,7 @@ export async function readInbox(): Promise<InboxResult> {
     throw e;
   }
 
+  const scanDates = await readScanDatesByUrl();
   const lines = raw.split("\n");
   const pending: InboxEntry[] = [];
   const processed: InboxEntry[] = [];
@@ -57,8 +59,31 @@ export async function readInbox(): Promise<InboxResult> {
       title: m[4].trim(),
       raw: line,
     };
+    entry.firstSeen = scanDates.get(entry.url);
     (bucket === "pending" ? pending : processed).push(entry);
   }
 
   return { pending, processed };
+}
+
+async function readScanDatesByUrl(): Promise<Map<string, string>> {
+  let raw: string;
+  try {
+    raw = await fs.readFile(paths.scanHistory(), "utf8");
+  } catch (e) {
+    if ((e as NodeJS.ErrnoException).code === "ENOENT") return new Map();
+    throw e;
+  }
+
+  const dates = new Map<string, string>();
+  for (const line of raw.split("\n").slice(1)) {
+    if (!line.trim()) continue;
+    const [url, firstSeen] = line.split("\t");
+    if (!url || !firstSeen) continue;
+    const normalizedDate = firstSeen.trim();
+    if (/^\d{4}-\d{2}-\d{2}$/.test(normalizedDate)) {
+      dates.set(url.trim(), normalizedDate);
+    }
+  }
+  return dates;
 }

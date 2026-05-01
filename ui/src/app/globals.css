@@ -136,6 +136,21 @@ body {
 }
 .pill-ghost:hover { opacity: 0.8; }
 
+.job-activity-dot--live {
+  animation: job-activity-pulse 1.35s var(--ease-apple) infinite;
+}
+
+@keyframes job-activity-pulse {
+  0%, 100% {
+    box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 40%, transparent);
+    opacity: 0.75;
+  }
+  50% {
+    box-shadow: 0 0 0 7px color-mix(in srgb, var(--accent) 0%, transparent);
+    opacity: 1;
+  }
+}
+
 /* Section wrapper */
 .section {
   padding-block: clamp(4rem, 9vw, 9rem);

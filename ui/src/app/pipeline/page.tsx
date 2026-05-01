@@ -74,6 +74,7 @@ export default async function PipelinePage() {
                 style={{
                   display: "grid",
                   gridTemplateColumns: "60px 110px 1.2fr 1.6fr 90px 130px 60px",
+                  columnGap: "16px",
                   padding: "16px 24px",
                   borderBottom: "1px solid var(--surface-hairline)",
                   fontSize: "11px",
@@ -112,6 +113,7 @@ export default async function PipelinePage() {
                       display: "grid",
                       gridTemplateColumns:
                         "60px 110px 1.2fr 1.6fr 90px 130px 60px",
+                      columnGap: "16px",
                       padding: "18px 24px",
                       borderBottom: "1px solid var(--surface-hairline)",
                       alignItems: "center",

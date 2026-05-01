@@ -44,3 +44,11 @@ package-lock.json
 
 # UI runtime job store (local only)
 data/.ui-jobs.json
+
+# Personal data — never push
+interview-prep/
+.agents/
+
+# Scratch / temp files
+tmp-*
+*.tmp.json

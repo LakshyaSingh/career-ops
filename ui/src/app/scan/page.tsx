@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { readInbox } from "@/lib/career-ops/inbox";
+import { readInbox, type InboxEntry } from "@/lib/career-ops/inbox";
 import { ScanForm } from "@/components/ScanForm";
 import { InboxRow } from "@/components/InboxRow";
 
@@ -7,6 +7,8 @@ export const dynamic = "force-dynamic";
 
 export default async function ScanPage() {
   const { pending, processed } = await readInbox();
+  const pendingGroups = groupByScanDate(pending);
+  const processedGroups = groupByScanDate(processed);
 
   return (
     <section
@@ -64,8 +66,12 @@ export default async function ScanPage() {
           </div>
         ) : (
           <div className="card" style={{ overflow: "hidden" }}>
-            {pending.map((e, i) => (
-              <InboxRow key={`${e.url}-${i}`} entry={e} />
+            {pendingGroups.map((group) => (
+              <ScanDateGroup
+                key={`pending-${group.key}`}
+                group={group}
+                variant="pending"
+              />
             ))}
             {processed.length > 0 && pending.length > 0 && (
               <div
@@ -84,8 +90,12 @@ export default async function ScanPage() {
                 Already processed
               </div>
             )}
-            {processed.map((e, i) => (
-              <InboxRow key={`p-${e.url}-${i}`} entry={e} />
+            {processedGroups.map((group) => (
+              <ScanDateGroup
+                key={`processed-${group.key}`}
+                group={group}
+                variant="processed"
+              />
             ))}
           </div>
         )}
@@ -97,4 +107,129 @@ export default async function ScanPage() {
       </div>
     </section>
   );
+}
+
+interface ScanDateGroup {
+  key: string;
+  label: string;
+  helper: string;
+  entries: InboxEntry[];
+}
+
+function ScanDateGroup({
+  group,
+  variant,
+}: {
+  group: ScanDateGroup;
+  variant: "pending" | "processed";
+}) {
+  return (
+    <section aria-label={`${group.label} ${variant} jobs`}>
+      <div
+        style={{
+          display: "flex",
+          alignItems: "baseline",
+          justifyContent: "space-between",
+          gap: "1rem",
+          padding: "14px 24px",
+          background:
+            variant === "pending"
+              ? "color-mix(in srgb, var(--bg-elevated) 88%, var(--accent) 12%)"
+              : "var(--bg)",
+          borderBottom: "1px solid var(--surface-hairline)",
+          borderTop: "1px solid var(--surface-hairline)",
+        }}
+      >
+        <div>
+          <h3
+            style={{
+              margin: 0,
+              color: "var(--fg)",
+              fontSize: "0.92rem",
+              fontWeight: 650,
+            }}
+          >
+            {group.label}
+          </h3>
+          <p
+            style={{
+              margin: "0.2rem 0 0",
+              color: "var(--fg-subtle)",
+              fontSize: "0.78rem",
+            }}
+          >
+            {group.helper}
+          </p>
+        </div>
+        <span
+          style={{
+            flex: "0 0 auto",
+            color: "var(--fg-muted)",
+            fontSize: "0.78rem",
+            fontVariantNumeric: "tabular-nums",
+          }}
+        >
+          {group.entries.length} {group.entries.length === 1 ? "job" : "jobs"}
+        </span>
+      </div>
+      {group.entries.map((entry, i) => (
+        <InboxRow key={`${variant}-${group.key}-${entry.url}-${i}`} entry={entry} />
+      ))}
+    </section>
+  );
+}
+
+function groupByScanDate(entries: InboxEntry[]): ScanDateGroup[] {
+  const byDate = new Map<string, InboxEntry[]>();
+  for (const entry of entries) {
+    const key = entry.firstSeen ?? "undated";
+    const group = byDate.get(key) ?? [];
+    group.push(entry);
+    byDate.set(key, group);
+  }
+
+  const sorted = [...byDate.entries()]
+    .sort(([a], [b]) => compareScanDateKeys(a, b));
+
+  return sorted
+    .map(([key, groupEntries], index) => ({
+      key,
+      label: labelForScanDate(key, index === 0),
+      helper: helperForScanDate(key),
+      entries: groupEntries,
+    }));
+}
+
+function compareScanDateKeys(a: string, b: string) {
+  if (a === "undated") return 1;
+  if (b === "undated") return -1;
+  return b.localeCompare(a);
+}
+
+function labelForScanDate(key: string, isLatest: boolean) {
+  if (key === "undated") return "Manual or older inbox items";
+  if (key === todayKey()) return `Today's scan - ${formatScanDate(key)}`;
+  if (isLatest) return `Latest scan - ${formatScanDate(key)}`;
+  return `Previous scan - ${formatScanDate(key)}`;
+}
+
+function helperForScanDate(key: string) {
+  if (key === "undated") {
+    return "No scan date recorded in scan history.";
+  }
+  return `First seen ${key}`;
+}
+
+function todayKey() {
+  return new Date().toLocaleDateString("en-CA");
+}
+
+function formatScanDate(key: string) {
+  const [year, month, day] = key.split("-").map(Number);
+  if (!year || !month || !day) return key;
+  return new Intl.DateTimeFormat("en", {
+    month: "short",
+    day: "numeric",
+    year: "numeric",
+  }).format(new Date(year, month - 1, day));
 }
