@@ -8,6 +8,8 @@ This is a fork of [santifer/career-ops](https://github.com/santifer/career-ops).
 
 **What I added: a local web UI on top of the CLI.**
 
+![Career-Ops Web UI — Apple-style landing page](docs/ui-landing.png)
+
 Career-Ops is a powerful tool gated behind a terminal. Most people who would benefit from it, job seekers without engineering backgrounds, can't use it. So I built the layer that makes the same system clickable.
 
 Think of it as the Macintosh moment for Career-Ops: same engine, broader access.
@@ -139,37 +141,6 @@ claude   # Open Claude Code in this directory
 > **The system is designed to be customized by Claude itself.** Modes, archetypes, scoring weights, negotiation scripts -- just ask Claude to change them. It reads the same files it uses, so it knows exactly what to edit.
 
 See [docs/SETUP.md](docs/SETUP.md) for the full setup guide.
-
-## Web UI (local)
-
-![Career-Ops Web UI — Apple-style landing page](docs/ui-landing.png)
-
-If you'd rather click than type, this fork ships with a local web UI that
-runs on your laptop and reads/writes the same files Claude Code uses.
-
-```bash
-npm run ui
-```
-
-That's it — first run installs UI deps (~30s), subsequent runs are instant.
-Your default browser opens at `http://localhost:3000`. From inside Claude
-Code you can also type `/ui` to launch it.
-
-What you get:
-
-- **Forms** for editing `cv.md` and `config/profile.yml` (field-merge safe — advanced fields like `archetypes` and `proof_points` are preserved on save)
-- **Pipeline view** of every offer you've evaluated, sorted by score, with status pills and Apple-style typography
-- **Paste-URL evaluator** — pastes a JD, runs `claude -p` in the background, streams the live log
-- **Report viewer** — renders the A–G evaluation reports with proper typography, tables, and code blocks
-- **One-click PDF generation** — wires `/career-ops pdf` to a button at the bottom of every report
-- **Portal scanner** — runs `npm run scan`, lists pending URLs in an inbox with per-row Evaluate buttons
-- **Settings + diagnostic** — structured fs.exists checks for every well-known file, plus a "Run full diagnostic" button that streams `node doctor.mjs` output
-
-Everything stays on your laptop. No hosting, no auth, no cloud. Jobs run
-in parallel as separate `claude -p` subprocesses.
-
-See [`ui/README.md`](ui/README.md) for the full guide, environment variables,
-and the route map.
 
 ## Gemini CLI Integration
 
