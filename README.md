@@ -2,6 +2,34 @@
 
 [English](README.md) | [Español](README.es.md) | [Português (Brasil)](README.pt-BR.md) | [한국어](README.ko-KR.md) | [日本語](README.ja.md) | [Русский](README.ru.md) | [简体中文](README.cn.md) | [繁體中文](README.zh-TW.md)
 
+## About This Fork
+
+This is a fork of [santifer/career-ops](https://github.com/santifer/career-ops). All credit for the underlying system, the A–G scoring logic, the portal scanner, the evaluation engine, goes to [Santiago Fernández de Valderrama](https://santifer.io). He built it and used it to evaluate 740+ job offers and land a Head of Applied AI role.
+
+**What I added: a local web UI on top of the CLI.**
+
+Career-Ops is a powerful tool gated behind a terminal. Most people who would benefit from it, job seekers without engineering backgrounds, can't use it. So I built the layer that makes the same system clickable.
+
+Think of it as the Macintosh moment for Career-Ops: same engine, broader access.
+
+- Forms for editing `cv.md` and `config/profile.yml` (field-merge safe)
+- Pipeline view of every offer evaluated, sorted by score, with Apple-style typography
+- Paste-URL evaluator that streams the live `claude -p` log
+- Report viewer for the A–G evaluation reports
+- One-click PDF generation wired to `/career-ops pdf`
+- Portal scanner with per-row Evaluate buttons
+- Settings + diagnostic panel with structured file checks
+
+Run it with `npm run ui`. First run installs UI deps (~30s), then opens `http://localhost:3000`. Everything stays local.
+
+Code lives in [`ui/`](./ui). Full guide in [`ui/README.md`](./ui/README.md).
+
+I wrote about the product thinking behind this fork [here](https://www.linkedin.com/in/lakshya-singh-/).
+
+The rest of this README is Santiago's, kept intact.
+
+---
+
 <p align="center">
   <a href="https://x.com/santifer"><img src="docs/hero-banner.jpg" alt="Career-Ops — Multi-Agent Job Search System" width="800"></a>
 </p>
