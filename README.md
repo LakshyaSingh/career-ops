@@ -26,7 +26,7 @@ Run it with `npm run ui`. First run installs UI deps (~30s), then opens `http://
 
 Code lives in [`ui/`](./ui). Full guide in [`ui/README.md`](./ui/README.md).
 
-I wrote about the product thinking behind this fork [here](https://www.linkedin.com/in/lakshya-singh-/).
+I wrote about the product thinking behind this fork [here](https://www.linkedin.com/posts/ls25_job-hunting-today-rewards-volume-over-fit-share-7455043826064408576-lHV9?utm_source=social_share_send&utm_medium=member_desktop_web&rcm=ACoAAC0VoD4BEOv8yQDO3JGSUUoW3hjbpbO3aeE).
 
 The rest of this README is Santiago's, kept intact.
 
